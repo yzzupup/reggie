@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
 /**
  * ClassName: EmployeeServiceImpl
  * Package: com.example.service.impl
@@ -42,5 +45,22 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         YzzTool.copyAttributes(toEmployee, employee);
         return LoginEnum.LOGIN_SUCCESS;
+    }
+
+    @Override
+    public void insert(HttpServletRequest request, Employee employee) {
+
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        Long fromId = (Long) request.getSession().getAttribute("employee");
+        employee.setCreateUser(fromId);
+        employee.setUpdateUser(fromId);
+
+        employeeDAO.insert(employee);
+
+        return;
+
     }
 }

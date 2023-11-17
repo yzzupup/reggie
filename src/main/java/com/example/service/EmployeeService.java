@@ -2,6 +2,8 @@ package com.example.service;
 
 import com.example.entity.Employee;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * ClassName: EmployeeService
  * Package: com.example.service
@@ -13,4 +15,6 @@ import com.example.entity.Employee;
  */
 public interface EmployeeService {
     Integer login(Employee employee);
+
+    void insert(HttpServletRequest request, Employee employee);
 }

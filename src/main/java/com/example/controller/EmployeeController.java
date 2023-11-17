@@ -55,5 +55,12 @@ public class EmployeeController {
     }
 
 
+    @PostMapping
+    public R<String> insert(HttpServletRequest request, @RequestBody Employee employee){
+
+        employeeService.insert(request, employee);
+
+        return R.success("新增成功");
+    }
 
 }
