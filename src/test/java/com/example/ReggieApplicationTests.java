@@ -11,4 +11,15 @@ class ReggieApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void teststt(){
+        String[] a = new String[4];
+        a[0] = "111";
+        solve(a);
+        System.out.println(a[0]);
+    }
+    void solve(String[] a){
+        a[0] = "222";
+    }
+
 }

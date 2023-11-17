@@ -50,9 +50,10 @@ public class EmployeeController {
 
     @PostMapping("/logout")
     public R<String> logout(HttpServletRequest request){
-
         request.getSession().removeAttribute("employee");
         return R.success("退出成功");
     }
+
+
 
 }
