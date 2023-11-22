@@ -1,6 +1,6 @@
 package com.example.controller;
 
-import com.example.common.LoginEnum;
+import com.example.common.ResEnum;
 import com.example.common.R;
 import com.example.entity.Employee;
 import com.example.service.EmployeeService;
@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 /**
  * ClassName: EmployeeController
@@ -32,16 +33,16 @@ public class EmployeeController {
         Integer res = employeeService.login(employee);
 
         switch (res){
-            case LoginEnum.NO_USER:
+            case ResEnum.NO_USER:
                 return R.error("用户不存在");
 
-            case LoginEnum.PASSWORD_ERROR:
+            case ResEnum.PASSWORD_ERROR:
                 return R.error("密码错误");
 
-            case LoginEnum.BANNED:
+            case ResEnum.BANNED:
                 return R.error("用户已被禁用");
 
-            case LoginEnum.LOGIN_SUCCESS:
+            case ResEnum.SUCCESS:
             default:
                 request.getSession().setAttribute("employee", employee.getId());
                 return R.success(employee);
@@ -61,6 +62,13 @@ public class EmployeeController {
         employeeService.insert(request, employee);
 
         return R.success("新增成功");
+    }
+
+    @GetMapping("/page")
+    public R<HashMap<String, Object>> getByPage(Integer page, Integer pageSize){
+
+        HashMap<String, Object> res = employeeService.getByPage(page, pageSize);
+        return R.success(res);
     }
 
 }

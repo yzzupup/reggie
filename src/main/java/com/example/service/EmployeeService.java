@@ -3,6 +3,7 @@ package com.example.service;
 import com.example.entity.Employee;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 /**
  * ClassName: EmployeeService
@@ -16,5 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public interface EmployeeService {
     Integer login(Employee employee);
 
-    void insert(HttpServletRequest request, Employee employee);
+    Integer insert(HttpServletRequest request, Employee employee);
+
+    HashMap<String, Object> getByPage(Integer page, Integer row);
 }

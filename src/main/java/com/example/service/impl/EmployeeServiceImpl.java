@@ -1,16 +1,20 @@
 package com.example.service.impl;
 
 import com.example.dao.EmployeeDAO;
-import com.example.common.LoginEnum;
+import com.example.common.ResEnum;
 import com.example.entity.Employee;
 import com.example.service.EmployeeService;
+import com.example.utils.EntityUtils;
 import com.example.utils.YzzTool;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 
 /**
  * ClassName: EmployeeServiceImpl
@@ -35,22 +39,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         Employee toEmployee = employeeDAO.selectByUsername(employee.getUsername());
         if(toEmployee == null)
-            return LoginEnum.NO_USER;
+            return ResEnum.NO_USER;
 
         if(!password.equals(toEmployee.getPassword()))
-            return LoginEnum.PASSWORD_ERROR;
+            return ResEnum.PASSWORD_ERROR;
 
         if(toEmployee.getStatus().equals(0))
-            return LoginEnum.BANNED;
+            return ResEnum.BANNED;
 
         YzzTool.copyAttributes(toEmployee, employee);
-        return LoginEnum.LOGIN_SUCCESS;
+        return ResEnum.SUCCESS;
     }
 
     @Override
-    public void insert(HttpServletRequest request, Employee employee) {
+    public Integer insert(HttpServletRequest request, Employee employee) {
 
-        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        EntityUtils.setDefault(employee);
+
+        employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
         employee.setCreateTime(LocalDateTime.now());
         employee.setUpdateTime(LocalDateTime.now());
 
@@ -60,7 +66,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         employeeDAO.insert(employee);
 
-        return;
+        return ResEnum.SUCCESS;
 
     }
+
+    @Override
+    public HashMap<String, Object> getByPage(Integer page, Integer row) {
+
+        PageHelper.startPage(page, row);
+        PageInfo info = new PageInfo(employeeDAO.getAll());
+
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("total", info.getTotal());
+        res.put("records", info.getList());
+
+        return res;
+    }
+
 }
