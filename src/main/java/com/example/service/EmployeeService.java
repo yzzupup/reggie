@@ -19,5 +19,5 @@ public interface EmployeeService {
 
     Integer insert(HttpServletRequest request, Employee employee);
 
-    HashMap<String, Object> getByPage(Integer page, Integer row);
+    HashMap<String, Object> getByPage(Integer page, Integer row, String username);
 }

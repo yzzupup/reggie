@@ -20,10 +20,9 @@ import java.time.LocalDateTime;
 @ResponseBody
 @Slf4j
 public class ControllerExceptionHandler {
-
-
     @ExceptionHandler({Exception.class})
     public R<String> exceptionHandler(Exception ex){
+
         log.error(String.format("%s 发生异常 %s", LocalDateTime.now(), ex.getMessage()));
 
         return R.error("出现未知错误");

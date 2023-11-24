@@ -22,6 +22,5 @@ public interface EmployeeDAO extends BaseMapper<Employee> {
     @Select("select * from employee where username = #{username}")
     Employee selectByUsername(String username);
 
-    @Select("select * from employee")
-    List<Employee> getAll();
+    List<Employee> getAll(String name);
 }

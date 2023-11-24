@@ -10,6 +10,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +26,7 @@ import java.util.HashMap;
  * @Create 2023/11/13 15:25
  * @Version 1.0
  */
-@Controller
+@Service
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
@@ -71,10 +72,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public HashMap<String, Object> getByPage(Integer page, Integer row) {
+    public HashMap<String, Object> getByPage(Integer page, Integer row, String name) {
 
         PageHelper.startPage(page, row);
-        PageInfo info = new PageInfo(employeeDAO.getAll());
+        PageInfo info = new PageInfo(employeeDAO.getAll(name));
 
         HashMap<String, Object> res = new HashMap<>();
         res.put("total", info.getTotal());
