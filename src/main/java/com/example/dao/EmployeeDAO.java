@@ -23,4 +23,5 @@ public interface EmployeeDAO extends BaseMapper<Employee> {
     Employee selectByUsername(String username);
 
     List<Employee> getAll(String name);
+
 }

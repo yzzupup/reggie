@@ -38,8 +38,10 @@ public class EmployeeController {
     public void init(){
 
         ControllerRule controllerRule = new ControllerRule();
-        controllerRule.setRes("用户已存在");
-        controllerRule.setSql("select count(*) from employee where username = '%s'");
+        controllerRule.setObjRes("用户已存在");
+        controllerRule.setFieldRes("用户不存在");
+        controllerRule.setNameSql("select count(*) from employee where username = '%s'");
+        controllerRule.setIdSql("select count(*) from employee where id = '%s'");
 
         controllerAspect
                 .localRule
@@ -86,6 +88,28 @@ public class EmployeeController {
     public R<HashMap<String, Object>> getByPage(Integer page, Integer pageSize, String name){
 
         HashMap<String, Object> res = employeeService.getByPage(page, pageSize, name);
+        return R.success(res);
+
+    }
+
+    @PutMapping
+    public R<String> updateStateFieldById(HttpServletRequest request, @RequestBody Employee employee){
+        int res = employeeService.updateStateFieldById(request, employee);
+
+        if(res == ResEnum.UNKNOWN_ERROR)
+            return R.error("未知错误");
+        if(employee.getStatus() == 1)
+            return R.success("启用成功");
+        else
+            return R.success("禁用成功");
+    }
+
+    @GetMapping("/{id}")
+    public R<Employee> getById(@PathVariable Long id){
+        Employee res = employeeService.getById(id);
+
+        if(res == null)
+            return R.error("用户不存在");
         return R.success(res);
     }
 

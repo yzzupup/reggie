@@ -84,4 +84,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         return res;
     }
 
+    @Override
+    public Integer updateStateFieldById(HttpServletRequest request, Employee employee) {
+
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
+
+        int res = employeeDAO.updateById(employee);
+
+        if(res > 0)
+            return ResEnum.SUCCESS;
+        return ResEnum.UNKNOWN_ERROR;
+    }
+
+    @Override
+    public Employee getById(Long id) {
+
+        return employeeDAO.selectById(id);
+    }
+
 }
