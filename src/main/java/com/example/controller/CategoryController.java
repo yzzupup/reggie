@@ -37,8 +37,11 @@ public class CategoryController {
     @PostConstruct
     public void init(){
         ControllerRule controllerRule = new ControllerRule();
-        controllerRule.setRes("分类已存在");
-        controllerRule.setSql("select count(*) from Category where name = '%s'");
+        controllerRule.setObjRes("分类已存在");
+        controllerRule.setFieldRes("分类不存在");
+        controllerRule.setNameSql("select count(*) from Category where name = '%s'");
+        controllerRule.setIdSql("select count(*) from Category where id = '%s'");
+
 
         controllerAspect
                 .localRule

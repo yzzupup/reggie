@@ -18,8 +18,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ControllerRule {
 
-    private String sql;
+    private String idSql;
 
-    private String res;
+    private String nameSql;
+
+    private String ObjRes;
+
+    private String FieldRes;
 
 }

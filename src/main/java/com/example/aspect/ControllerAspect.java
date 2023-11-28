@@ -50,18 +50,38 @@ public class ControllerAspect {
 
             Object arg = joinPoint.getArgs()[1];
             String value = "";
+            
+            Long id = 0L;
 
-            if(arg instanceof Employee)
-                value = ((Employee) arg).getUsername();
-            else if(arg instanceof Category)
-                value = ((Category) arg).getName();
+            if(arg instanceof Employee) {
+                Employee employee = (Employee) arg;
+                id = employee.getId();
+                value = employee.getUsername();
+            }
+            else if(arg instanceof Category) {
+                Category category = (Category) arg;
+                id = category.getId();
+                value = category.getName();
+            }
+
 
             if(!"".equals(value)){
-                String sql = String.format(localRule.get(name).getSql(), value);
-                Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
 
-                if(count > 0)
-                    return R.error(localRule.get(name).getRes());
+                String methodName = joinPoint.getSignature().getName();
+                if(methodName.contains("Field")){
+                    String sql = String.format(localRule.get(name).getIdSql(), id.toString());
+                    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+
+                    if(count == 0)
+                        return R.error(localRule.get(name).getFieldRes());
+                }
+                else{
+                    String sql = String.format(localRule.get(name).getNameSql(), value);
+                    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+
+                    if(count > 0)
+                        return R.error(localRule.get(name).getObjRes());
+                }
             }
         }
 
