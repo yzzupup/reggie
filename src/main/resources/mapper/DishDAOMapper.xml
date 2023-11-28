@@ -1,0 +1,11 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.DishDAO">
+    <select id="getAll" resultType="com.example.entity.Dish">
+        select * from dish
+        <where>
+            <if test="name != null">
+                name like concat("%", concat(name, "%"))
+            </if>
+        </where>
+    </select>
+</mapper>
