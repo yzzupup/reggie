@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.example.common.BaseContext;
 import com.example.common.R;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 
 import javax.servlet.*;
@@ -28,6 +29,9 @@ public class LoginCheckFilter implements Filter {
 
     private static final AntPathMatcher PATH_MATCHER = new AntPathMatcher();
 
+    @Value("${filter.run}")
+    private int filterRun;
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         Filter.super.init(filterConfig);
@@ -35,6 +39,7 @@ public class LoginCheckFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
@@ -45,7 +50,7 @@ public class LoginCheckFilter implements Filter {
                 "/front/**"
         };
 
-        if(check(urls, request.getRequestURI())){
+        if(filterRun == 0 || check(urls, request.getRequestURI())){
             filterChain.doFilter(request, response);
             return;
         }

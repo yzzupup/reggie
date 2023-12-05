@@ -24,3 +24,9 @@ package:
   name: com.example
 
 maxTime: 36000
+
+filter:
+  run: 0
+
+file:
+  path: D:\img\
