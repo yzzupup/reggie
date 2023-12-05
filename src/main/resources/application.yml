@@ -22,3 +22,5 @@ mybatis-plus:
 
 package:
   name: com.example
+
+maxTime: 36000

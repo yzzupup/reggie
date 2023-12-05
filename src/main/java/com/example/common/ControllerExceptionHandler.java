@@ -46,7 +46,7 @@ public class ControllerExceptionHandler {
 //                LocalDateTime.now(), ex.getMessage(), controllerName, lineNumber));
 
         log.error(String.format("\n ERROR! %s 发生异常" +
-                " \n 异常原因: %s" +
+                " \n 异常原因: %s",
                 LocalDateTime.now(), ex.getMessage()));
 
         String msg = ex.getMessage();
