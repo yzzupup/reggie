@@ -42,45 +42,50 @@ public class ControllerAspect {
     private JdbcTemplate jdbcTemplate;
     public HashMap<String, ControllerRule> localRule = new HashMap<>();
     @Around("execution(* com.example.controller.*.insert*(..))" +
-            "|| execution(* com.example.controller.*.update*(..))")
+            "|| execution(* com.example.controller.*.update*(..))" +
+            "|| execution(* com.example.controller.*.delete*(..))")
     public Object beforeMethod(ProceedingJoinPoint joinPoint) throws Throwable {
 
         String name = joinPoint.getTarget().getClass().getName();
+        String methodName = joinPoint.getSignature().getName();
+
         if(localRule.containsKey(name)){
 
-            Object arg = joinPoint.getArgs()[1];
-            String value = "";
-            
-            Long id = 0L;
+            Object[] args = joinPoint.getArgs();
 
-            if(arg instanceof Employee) {
-                Employee employee = (Employee) arg;
-                id = employee.getId();
-                value = employee.getUsername();
+            if(methodName.contains("delete")){
+                if(checkThisExist(name, Long.parseLong(args[0].toString())) == false)
+                    return R.error(localRule.get(name).getFieldRes());
             }
-            else if(arg instanceof Category) {
-                Category category = (Category) arg;
-                id = category.getId();
-                value = category.getName();
-            }
+            else{
 
+                String value = "";
+                Long id = 0L;
 
-            if(!"".equals(value)){
+                for (Object arg: args) {
 
-                String methodName = joinPoint.getSignature().getName();
-                if(methodName.contains("Field")){
-                    String sql = String.format(localRule.get(name).getIdSql(), id.toString());
-                    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-
-                    if(count == 0)
-                        return R.error(localRule.get(name).getFieldRes());
+                    if(arg instanceof Employee) {
+                        Employee employee = (Employee) arg;
+                        id = employee.getId();
+                        value = employee.getUsername();
+                        break;
+                    }
+                    else if(arg instanceof Category) {
+                        Category category = (Category) arg;
+                        id = category.getId();
+                        value = category.getName();
+                        break;
+                    }
                 }
-                else{
-                    String sql = String.format(localRule.get(name).getNameSql(), value);
-                    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
 
-                    if(count > 0)
+                if(!"".equals(value)){
+
+                    if(methodName.contains("update") && checkThisExist(name, id) == false)
+                        return R.error(localRule.get(name).getFieldRes());
+
+                    if(checkTargetExist(name, value) == false)
                         return R.error(localRule.get(name).getObjRes());
+
                 }
             }
         }
@@ -97,4 +102,27 @@ public class ControllerAspect {
 //        log.info("参数: " + Arrays.toString(args));
 //        log.info("调用时间: " + LocalDateTime.now());
     }
+
+
+    private boolean checkThisExist(String name, Long id){
+        String sql = String.format(localRule.get(name).getIdSql(), id.toString());
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+
+        if(count == 0)
+            return false;
+        return true;
+    }
+
+    private boolean checkTargetExist(String name, String value){
+
+        String sql = String.format(localRule.get(name).getNameSql(), value);
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+
+        if(count > 0)
+            return false;
+        return true;
+    }
 }
+
+
+
