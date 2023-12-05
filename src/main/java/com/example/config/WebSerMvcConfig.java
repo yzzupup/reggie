@@ -1,13 +1,18 @@
 package com.example.config;
 
+import com.example.common.JacksonObjectMapper;
 import com.example.interceptor.LoginInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
 
 /**
  * ClassName: WebSerMvcConfig
@@ -37,4 +42,13 @@ public class WebSerMvcConfig extends WebMvcConfigurationSupport {
 //        registry.addInterceptor(loginInterceptor).addPathPatterns("/**");
 //    }
 
+
+    @Override
+    protected void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        converter.setObjectMapper(new JacksonObjectMapper());
+        converters.add(0, converter);
+        super.extendMessageConverters(converters);
+    }
 }
