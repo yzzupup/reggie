@@ -18,4 +18,6 @@ public interface CategoryService {
     HashMap<String, Object> getByPage(Integer page, Integer pageSize);
 
     Integer insertDishOrSetmealCategory(HttpServletRequest request, Category category);
+
+    Integer deleteFieldsById(String ids);
 }

@@ -58,12 +58,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         EntityUtils.setDefault(employee);
 
         employee.setPassword(DigestUtils.md5DigestAsHex(employee.getPassword().getBytes()));
-        employee.setCreateTime(LocalDateTime.now());
-        employee.setUpdateTime(LocalDateTime.now());
-
-        Long fromId = (Long) request.getSession().getAttribute("employee");
-        employee.setCreateUser(fromId);
-        employee.setUpdateUser(fromId);
+//        employee.setCreateTime(LocalDateTime.now());
+//        employee.setUpdateTime(LocalDateTime.now());
+//
+//        Long fromId = (Long) request.getSession().getAttribute("employee");
+//        employee.setCreateUser(fromId);
+//        employee.setUpdateUser(fromId);
 
         employeeDAO.insert(employee);
 
@@ -85,10 +85,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Integer updateStateFieldById(HttpServletRequest request, Employee employee) {
+    public Integer updateFieldsById(HttpServletRequest request, Employee employee) {
 
-        employee.setUpdateTime(LocalDateTime.now());
-        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
+//        employee.setUpdateTime(LocalDateTime.now());
+//        employee.setUpdateUser((Long) request.getSession().getAttribute("employee"));
 
         int res = employeeDAO.updateById(employee);
 

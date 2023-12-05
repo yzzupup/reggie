@@ -2,7 +2,9 @@ package com.example.service.impl;
 
 import com.example.common.ResEnum;
 import com.example.dao.CategoryDAO;
+import com.example.dao.DishDAO;
 import com.example.entity.Category;
+import com.example.exception.CustomException;
 import com.example.service.CategoryService;
 import com.example.utils.EntityUtils;
 import com.github.pagehelper.IPage;
@@ -51,6 +53,20 @@ public class CategoryServiceImpl implements CategoryService {
 
         EntityUtils.setDefault(category);
         categoryDAO.insert(category);
+
+        return ResEnum.SUCCESS;
+    }
+
+    @Override
+    public Integer deleteFieldsById(String ids) {
+
+        if(categoryDAO.selectDishById(ids) > 0)
+            throw new CustomException("该分类在菜品中已存在");
+
+        if(categoryDAO.selectSetmealById(ids) > 0)
+            throw new CustomException("该分类在套餐中已存在");
+
+        categoryDAO.deleteById(ids);
 
         return ResEnum.SUCCESS;
     }

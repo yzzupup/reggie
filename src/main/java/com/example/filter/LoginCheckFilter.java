@@ -1,6 +1,7 @@
 package com.example.filter;
 
 import com.alibaba.fastjson.JSON;
+import com.example.common.BaseContext;
 import com.example.common.R;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
@@ -56,6 +57,7 @@ public class LoginCheckFilter implements Filter {
             return;
         }
 
+        BaseContext.setCurrentId((Long) employee);
         filterChain.doFilter(request, response);
     }
 

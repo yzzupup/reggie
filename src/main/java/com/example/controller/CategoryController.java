@@ -64,4 +64,11 @@ public class CategoryController {
     }
 
 
+    @DeleteMapping
+    public R<String> deletedFieldsById(String ids){
+        categoryService.deleteFieldsById(ids);
+
+        return R.success("删除成功");
+    }
+
 }

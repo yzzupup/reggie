@@ -8,10 +8,12 @@ import com.example.entity.Employee;
 import com.example.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 
 /**
@@ -27,6 +29,9 @@ import java.util.HashMap;
 @RequestMapping("/employee")
 @Slf4j
 public class EmployeeController {
+
+    @Value("${maxTime}")
+    private int maxTime;
 
     @Autowired
     private EmployeeService employeeService;
@@ -64,7 +69,10 @@ public class EmployeeController {
 
             case ResEnum.SUCCESS:
             default:
-                request.getSession().setAttribute("employee", employee.getId());
+                HttpSession session = request.getSession();
+                session.setAttribute("employee", employee.getId());
+                session.setMaxInactiveInterval(maxTime);
+
                 return R.success(employee);
         }
     }
@@ -93,8 +101,8 @@ public class EmployeeController {
     }
 
     @PutMapping
-    public R<String> updateStateFieldById(HttpServletRequest request, @RequestBody Employee employee){
-        int res = employeeService.updateStateFieldById(request, employee);
+    public R<String> updateFieldsById(HttpServletRequest request, @RequestBody Employee employee){
+        int res = employeeService.updateFieldsById(request, employee);
 
         if(res == ResEnum.UNKNOWN_ERROR)
             return R.error("未知错误");

@@ -21,7 +21,7 @@ public interface EmployeeService {
 
     HashMap<String, Object> getByPage(Integer page, Integer row, String username);
 
-    Integer updateStateFieldById(HttpServletRequest request, Employee employee);
+    Integer updateFieldsById(HttpServletRequest request, Employee employee);
 
     Employee getById(Long id);
 }
