@@ -13,6 +13,7 @@ import com.example.common.R;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * ClassName: CategoryController
@@ -69,6 +70,20 @@ public class CategoryController {
         categoryService.deleteFieldsById(ids);
 
         return R.success("删除成功");
+    }
+
+    @PutMapping
+    public R<String> updateById(@RequestBody Category category){
+
+        categoryService.updateById(category);
+
+        return R.success("修改成功");
+    }
+
+    @GetMapping("/list")
+    public R<List<Category>> list(Category category){
+        List<Category> categoryList = categoryService.getCategoryList(category.getType());
+        return R.success(categoryList);
     }
 
 }

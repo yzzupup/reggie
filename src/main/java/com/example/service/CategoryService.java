@@ -4,6 +4,7 @@ import com.example.entity.Category;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * ClassName: CategoryService
@@ -20,4 +21,9 @@ public interface CategoryService {
     Integer insertDishOrSetmealCategory(HttpServletRequest request, Category category);
 
     Integer deleteFieldsById(String ids);
+
+    Integer updateById(Category category);
+
+    List<Category> getCategoryList(Integer type);
+
 }

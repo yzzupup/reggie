@@ -1,11 +1,13 @@
 package com.example.controller;
 
 import com.example.aspect.ControllerAspect;
+import com.example.common.R;
+import com.example.common.ResEnum;
+import com.example.dto.SetmealDto;
 import com.example.entity.ControllerRule;
+import com.example.service.SetmealService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
@@ -26,6 +28,9 @@ public class SetmealController {
     @Autowired
     private ControllerAspect controllerAspect;
 
+    @Autowired
+    private SetmealService setmealService;
+
     @PostConstruct
     void init(){
         ControllerRule controllerRule = new ControllerRule();
@@ -37,6 +42,27 @@ public class SetmealController {
         controllerAspect
                 .localRule
                 .put(this.getClass().getName(), controllerRule);
+    }
+
+
+    @GetMapping("/page")
+    public R<HashMap<String, Object>> getByPage(Integer page, Integer pageSize){
+        return R.success(setmealService.getByPage(page, pageSize));
+    }
+
+    @PostMapping
+    public R<String> insertNewSetmeal(@RequestBody SetmealDto setmealDto){
+
+        setmealService.insertNewSetmeal(setmealDto);
+        return R.success("新增成功");
+    }
+
+
+    @DeleteMapping
+    public R<String> deleteById(@RequestParam Long[] ids){
+        setmealService.deleteById(ids);
+
+        return R.success("删除成功!");
     }
 
 }

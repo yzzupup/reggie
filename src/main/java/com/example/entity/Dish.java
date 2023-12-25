@@ -15,60 +15,60 @@ import java.time.LocalDateTime;
 @Data
 public class Dish implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    public static final long serialVersionUID = 1L;
 
-    private Long id;
+    public Long id;
 
 
     //菜品名称
-    private String name;
+    public String name;
 
 
     //菜品分类id
-    private Long categoryId;
+    public Long categoryId;
 
 
     //菜品价格
-    private BigDecimal price;
+    public BigDecimal price;
 
 
     //商品码
-    private String code;
+    public String code;
 
 
     //图片
-    private String image;
+    public String image;
 
 
     //描述信息
-    private String description;
+    public String description;
 
 
     //0 停售 1 起售
-    private Integer status;
+    public Integer status;
 
 
     //顺序
-    private Integer sort;
+    public Integer sort;
 
 
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    public LocalDateTime createTime;
 
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    public LocalDateTime updateTime;
 
 
     @TableField(fill = FieldFill.INSERT)
-    private Long createUser;
+    public Long createUser;
 
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private Long updateUser;
+    public Long updateUser;
 
 
     //是否删除
-    private Integer isDeleted;
+    public Integer isDeleted;
 
 }

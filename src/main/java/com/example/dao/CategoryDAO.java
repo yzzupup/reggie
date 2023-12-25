@@ -27,4 +27,7 @@ public interface CategoryDAO extends BaseMapper<Category> {
 
     @Select("select count(name) from setmeal where category_id = #{ids}")
     Integer selectSetmealById(String ids);
+
+    @Select("select * from category where type = #{type}")
+    List<Category> getByType(Integer type);
 }

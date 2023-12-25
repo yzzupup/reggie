@@ -16,4 +16,7 @@ public class ResEnum {
     public static final int PASSWORD_ERROR = 1;
     public static final int SUCCESS = 2;
     public static final int BANNED = 3;
+
+    public static final int INSERT_ERROR = 4;
+    public static final Integer DELETED_ERROR = 5;
 }

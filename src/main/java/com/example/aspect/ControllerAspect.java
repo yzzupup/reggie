@@ -54,8 +54,18 @@ public class ControllerAspect {
             Object[] args = joinPoint.getArgs();
 
             if(methodName.contains("delete")){
-                if(checkThisExist(name, Long.parseLong(args[0].toString())) == false)
-                    return R.error(localRule.get(name).getFieldRes());
+                for (Object arg: args) {
+                    if(arg instanceof Long){
+                        if(checkThisExist(name, (Long) arg) == false)
+                            return R.error(localRule.get(name).getFieldRes());
+                    }
+                    else if(arg instanceof Long[]){
+                        for(Long id : (Long[]) arg)
+                            if(checkThisExist(name, id) == false)
+                                return R.error(localRule.get(name).getFieldRes());
+                    }
+                }
+
             }
             else{
 

@@ -2,15 +2,19 @@ package com.example.controller;
 
 import com.example.aspect.ControllerAspect;
 import com.example.common.R;
+import com.example.dto.DishDto;
+import com.example.entity.Category;
 import com.example.entity.ControllerRule;
+import com.example.entity.Dish;
+import com.example.entity.DishShow;
+import com.example.service.CategoryService;
 import com.example.service.DishService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * ClassName: DishController
@@ -30,6 +34,9 @@ public class DishController {
 
     @Autowired
     private DishService dishService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @PostConstruct
     public void init(){
@@ -54,6 +61,36 @@ public class DishController {
 
     }
 
+    @PostMapping
+    public R<String> insertNewDish(@RequestBody DishDto dishDto){
 
+        dishService.insertNewDish(dishDto);
+
+        return R.success("新增成功");
+    }
+
+    @GetMapping("/{id}")
+    public R<DishDto> getById(@PathVariable Long id){
+
+        DishDto dishDto = dishService.getById(id);
+
+        return R.success(dishDto);
+    }
+
+    @PutMapping
+    public R<String> updateById(@RequestBody DishDto dishDto){
+
+        dishService.updateById(dishDto);
+
+        return R.success("修改成功");
+    }
+
+    @GetMapping("list")
+    public R<List<Dish>> getByCategory(Long categoryId){
+
+        List<Dish> res = dishService.getByCategory(categoryId);
+        return R.success(res);
+
+    }
 
 }

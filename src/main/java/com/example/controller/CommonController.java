@@ -71,9 +71,6 @@ public class CommonController {
                 outputStream.close();
         }
 
-
-
-
         return;
     }
 }

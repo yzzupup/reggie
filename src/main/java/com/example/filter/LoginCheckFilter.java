@@ -44,10 +44,12 @@ public class LoginCheckFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String[] urls = new String[]{
-                "/employee/login",
-                "/employee/logout",
-                "/backend/**",
-                "/front/**"
+            "/employee/login",
+            "/employee/logout",
+            "/backend/**",
+            "/front/**",
+            "/user/sendMsg",
+            "/user/login"
         };
 
         if(filterRun == 0 || check(urls, request.getRequestURI())){
@@ -56,14 +58,20 @@ public class LoginCheckFilter implements Filter {
         }
 
         Object employee = request.getSession().getAttribute("employee");
-        if(employee == null){
-            log.info("{} 拦截请求 {}", LocalDateTime.now(), request.getRequestURI());
-            response.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
+        if(employee != null){
+            BaseContext.setCurrentId((Long) employee);
+            filterChain.doFilter(request, response);
             return;
         }
 
-        BaseContext.setCurrentId((Long) employee);
-        filterChain.doFilter(request, response);
+        Object user = request.getSession().getAttribute("user");
+        if(user != null){
+            BaseContext.setCurrentId((Long) user);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        response.getWriter().write(JSON.toJSONString(R.error("NOTLOGIN")));
     }
 
     @Override

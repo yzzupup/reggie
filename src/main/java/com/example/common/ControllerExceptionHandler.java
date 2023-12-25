@@ -1,5 +1,6 @@
 package com.example.common;
 
+import com.example.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -49,8 +50,10 @@ public class ControllerExceptionHandler {
                 " \n 异常原因: %s",
                 LocalDateTime.now(), ex.getMessage()));
 
+        ex.printStackTrace();
+
         String msg = ex.getMessage();
-        if(msg.contains("已存在"))
+        if(ex instanceof CustomException)
             return R.error(msg);
 
         return R.error("出现未知错误");
